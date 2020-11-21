@@ -52,9 +52,15 @@ https://github.com/SUN82564/5702FinalProject/graphs/contributors
 [8 points]
 
 Write a draft of the [Data Sources chapter](https://edav.info/project#report-format).
-Describe the data sources: who is responsible for collecting the data? How is it collected? If there were a choice of options, explain how you chose.
-Provide some basic information about the dataset: types of variables, number of records, etc.
-Describe any issues / problems with the data, either known or that you discover.
+
+The data source we use will be from the world bank database, and you can easily access the data from this link: https://databank.worldbank.org/source/jobs# . Yue will be responsible for collecting the data, and the process is relatively simple. One can go to the link and customize the data he/she wants from the interactive selection area. For out final project, we will be using the Jobs database, selecting 4 to 5 countries including Japan, China, United State, and South Africa, and all variables/series they provided. We will set the time range to be the most up to date 4-5 years to analyze. We will set the aggregation rule to be average of data available for each time period because we want to compare the overall situations across all countries. 
+
+Some basic information about the dataset:
+
+The job database provides 166 series/variables that we can use. Currently, we chose 5 countries and world data from most recent available 5 years, which yields 793*5 records. We work from this comprehensive dataset and select several variables that could help answer our research questions. We will also avoid using those that have a lot of missing values. The data types include categorical variables like countries, time series data, some variables with factor levels, and numerical variables. 
+
+Values for some variables are missing across all countries selected across all years, for example, the literacy rate, and values for variables like primary completion rate are missing for several years. We will further analyze the missing data to decide which ones could be used or not. Furthermore, the dataset is rather raw and will need to be reorganized because they break down into a very detailed way. For instance, many variables/series they provide should actually be the levels of the same variable. We will need to work on organize the data into a more usable form. 
+
 
 
 ### 5. Data Transformation
