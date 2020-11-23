@@ -1,7 +1,9 @@
 ---
-author:
 title: "EDAV Fall 2020 PSet 4"
-output: html_document
+author: "null"
+output:
+  pdf_document: default
+  html_document: default
 ---
 
 This assignment is designed to help you get started on the final project. Be sure to review the final project instructions (https://edav.info/project.html).
@@ -11,28 +13,29 @@ This assignment is designed to help you get started on the final project. Be sur
 [8 points]
 
 a) Who's on the team? (Include names and UNIs)
- names:       UNI:
- Yue Wang     yw3576
- Haoyu Liu
+\
+ names:       UNI:  \
+ Yue Wang     yw3576  \
+ Haoyu Liu    hl3299  \
  James Ding
  
 b) How do you plan to divide up the work? (Grading is on a group basis. The point of asking is to encourage you to think about this and design a plan.)
-
+\
   Right now, we came up with three research questions, but there will be more. Our idea is to come up with more questions related to a larger topic, and each of us will focus on one or two research questions, create graphs and provide comments. Each of us will add on to the others, communicates progress, and finally organize everything together. 
 
 c) What is your plan for managing the git/GitHub workflow? That is, who will merge pull requests? How will you attempt to avoid conflicts? How will you communicate?
-
+\
 
 ### 2. The Questions
 
 [10 points]
 
 List three questions that you hope you will be able to answer from your research. (It's ok if these change as your work progresses.)
-
+  \
 a)  What are some factors that effect employment?
-  
+  \ 
 b)  How do developed countries compare with developing countries in terms of job related areas?
-  
+  \  
 c)  How do population structures vary across different conutries?
   
 ### 3. GitHub repo
@@ -40,11 +43,11 @@ c)  How do population structures vary across different conutries?
 [8 points]
 
 a) Set up your final project repository following the EDAVproject template. Provide the link to the repo.
-
+  \
 https://github.com/SUN82564/5702FinalProject
 
 b) Make sure that all team members have write access to the repository and have practiced making contributions. Provide a link to the contributors page of your repository showing that all team members have made contributions to the repo (Note that we do not have the ability to see who has write access, only contributors):
-
+  \
 https://github.com/SUN82564/5702FinalProject/graphs/contributors
 
 ### 4. Data Sources
@@ -52,15 +55,14 @@ https://github.com/SUN82564/5702FinalProject/graphs/contributors
 [8 points]
 
 Write a draft of the [Data Sources chapter](https://edav.info/project#report-format).
-
+  \
 The data source we use will be from the world bank database, and you can easily access the data from this link: https://databank.worldbank.org/source/jobs# . Yue will be responsible for collecting the data, and the process is relatively simple. One can go to the link and customize the data he/she wants from the interactive selection area. For out final project, we will be using the Jobs database, selecting 4 to 5 countries including Japan, China, United State, and South Africa, and all variables/series they provided. We will set the time range to be the most up to date 4-5 years to analyze. We will set the aggregation rule to be average of data available for each time period because we want to compare the overall situations across all countries. 
-
+  \
 Some basic information about the dataset:
-
+  \
 The job database provides 166 series/variables that we can use. Currently, we chose 5 countries and world data from most recent available 5 years, which yields 793*5 records. We work from this comprehensive dataset and select several variables that could help answer our research questions. We will also avoid using those that have a lot of missing values. The data types include categorical variables like countries, time series data, some variables with factor levels, and numerical variables. 
-
+  \
 Values for some variables are missing across all countries selected across all years, for example, the literacy rate, and values for variables like primary completion rate are missing for several years. We will further analyze the missing data to decide which ones could be used or not. Furthermore, the dataset is rather raw and will need to be reorganized because they break down into a very detailed way. For instance, many variables/series they provide should actually be the levels of the same variable. We will need to work on organize the data into a more usable form. 
-
 
 
 ### 5. Data Transformation
@@ -68,6 +70,17 @@ Values for some variables are missing across all countries selected across all y
 [8 points]
 
 Write a draft of the [Data Transformation chapter](https://edav.info/project#report-format)
+
+```{r message=FALSE, warning=FALSE}
+library(readr)
+data <- read.csv("Data_Extract_From_Jobs.csv",na.strings='..')
+cleaned_data <- na.omit(data)
+```
+  \
+Fortunately, the data which the website provided is in xlsx and provided with detailed explanation about the variables inside the data. It could be easily converted to csv file which means that reading by Rstudio is straight forward. After finishing loading the data, we found that the data is already tidy. By now, we only need to change missing value into *NA* and remove those *NA* values. \
+
+After starting the project, we probably need to do more data transformation in order to display the interactive visualization and show complex information in d3.
+  \
 
 
 ### 6. Missing Values
