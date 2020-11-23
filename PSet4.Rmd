@@ -77,7 +77,7 @@ data <- read.csv("Data_Extract_From_Jobs.csv",na.strings='..')
 cleaned_data <- na.omit(data)
 ```
   \
-Fortunately, the data which the website provided is in xlsx and provided with detailed explanation about the variables inside the data. It could be easily converted to csv file which means that reading by Rstudio is straight forward. After finishing loading the data, we found that the data is already tidy. By now, we only need to change missing value into *NA* and remove those *NA* values. \
+Fortunately, the data which the website provided is in xlsx and provided with a detailed explanation about the variables inside the data. It could be easily converted to csv file which means that reading by Rstudio is straightforward. After finishing loading the data, we found that the data is already tidy. By now, we only need to change the missing value into *NA* and remove those *NA* values. \
 
 After starting the project, we probably need to do more data transformation in order to display the interactive visualization and show complex information in d3.
   \
