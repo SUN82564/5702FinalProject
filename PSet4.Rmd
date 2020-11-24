@@ -24,7 +24,7 @@ b) How do you plan to divide up the work? (Grading is on a group basis. The poin
   Right now, we came up with three research questions, but there will be more. Our idea is to come up with more questions related to a larger topic, and each of us will focus on one or two research questions, create graphs and provide comments. Each of us will add on to the others, communicates progress, and finally organize everything together. 
 
 c) What is your plan for managing the git/GitHub workflow? That is, who will merge pull requests? How will you attempt to avoid conflicts? How will you communicate?
-Yue Wang will be the person whoe will merge pull requests. In  order to avoid conflicts, we will communicate with each other once we have updated something through email to make sure they use the most updated file when folk it.\
+We will make sure everyone do it in our own branch, and merge everything together.. Yue Wang will be the person whoe will merge pull requests. In  order to avoid conflicts, we will communicate with each other once we have updated something through email to make sure they use the most updated file when folk it.\
 
 ### 2. The Questions
 
