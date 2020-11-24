@@ -17,7 +17,7 @@ a) Who's on the team? (Include names and UNIs)
  names:       UNI:  \
  Yue Wang     yw3576  \
  Haoyu Liu    hl3299  \
- James Ding
+ James Ding   jd3703
  
 b) How do you plan to divide up the work? (Grading is on a group basis. The point of asking is to encourage you to think about this and design a plan.)
 \
@@ -89,4 +89,73 @@ After starting the project, we probably need to do more data transformation in o
 
 Write a draft of the [Missing Values chapter](https://edav.info/project#report-format)
 
+```{r error=FALSE, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(naniar)
+data = read.csv("Data_Extract_From_Jobs.csv")
+data <- data %>% replace_with_na_all(condition = ~.x == "..")
+data <- data %>% filter(row_number() <= n() - 5)
+```
 
+Since countries have different priorities when gethering and reporting employment data, there are a lot of missing values in the dataset.
+
+```{r}
+colSums(is.na(data))
+```
+Understandably, the dataset does not have missing data regarding the country's name or the names of the factor (series) being measured. Furthermore, it seems that yearly the amount of missing data is around 210. Looking at the data, much of the missing data is not reported for all 5 years, which results in the consistent number of missing values. However, in 2013 the amount of missing data seemed to be lower at 195, and in 2016 the amount of missing data was much higher at 275.
+
+```{r}
+data$missing <- rowSums(is.na(data))
+ggplot(data, aes(x = missing)) +
+  geom_bar()
+```
+
+As shown above, for the vast majority of the rows, there are 0 missing values. This makes sense, as usually if the country reports the data in one year it'll usually continue to report the data for every year.  The next most common value seems to be 5, which means that the country simply does not report that data. The interesting values are 1 - 4, which means that the data was reported for some but not all of the years.
+
+```{r}
+ggplot(data, aes(x = missing)) +
+  geom_bar() +
+  facet_wrap(~ Country.Code)
+```
+
+A similar pattern seems to hold for the individual countries, where 0 is the most common number of missing values. However, for India, Japan, and South Africa, the second most common number of missing values are 4, 1, and 2, respectively. Since these are the countries with "unusual" distributions of missing values, it seems likely that these are the countries that cause the unusual number of missing values in year 2013 and 2016.
+
+```{r}
+Japan_missing <- data %>% filter(Country.Code == "JPN") %>% select(X2012..YR2012., X2013..YR2013., X2014..YR2014., X2015..YR2015., X2016..YR2016.) 
+colSums(is.na(Japan_missing))
+```
+Japan reported slightly less missing values than average in 2013, which lines up with the global trend. However, the big difference is that Japan reported significantly more missing values in 2016. This probably contributed to the high number of missing data in 2016
+
+```{r}
+India_missing <- data %>% filter(Country.Code == "IND") %>% select(X2012..YR2012., X2013..YR2013., X2014..YR2014., X2015..YR2015., X2016..YR2016.) 
+colSums(is.na(India_missing))
+```
+
+It seems that India is reporting more missing values as time goes on, which slightly contributes to the unusual values in 2013 and 2016.
+
+```{r}
+SA_missing <- data %>% filter(Country.Code == "ZAF") %>% select(X2012..YR2012., X2013..YR2013., X2014..YR2014., X2015..YR2015., X2016..YR2016.) 
+colSums(is.na(SA_missing))
+```
+
+Contrary to the global trend, South Africa actually reported its second most missing values in 2013. It also reported its most missing values in 2016 (almost double its median), which certainly impacted the total number of missing values. Also, out of the 5 countries we are looking at, South Africa reports the least amount of missing values.
+
+```{r}
+China_missing <- data %>% filter(Country.Code == "CHN") %>% select(X2012..YR2012., X2013..YR2013., X2014..YR2014., X2015..YR2015., X2016..YR2016.) 
+colSums(is.na(China_missing))
+```
+
+As expected, China was fairly consistent in its missing values, with slightly less in 2013 and slightly more in 2016. Out of the 5 countries we are looking at, China seems to have the most missing values.
+
+```{r}
+US_missing <- data %>% filter(Country.Code == "USA") %>% select(X2012..YR2012., X2013..YR2013., X2014..YR2014., X2015..YR2015., X2016..YR2016.) 
+colSums(is.na(US_missing))
+```
+The United States also reports a large number of missing values. Like other countries, it reports its least amount of missing values in 2013 and most in 2016. However, its second largets number of missing values occurs in 2012.
+
+```{r}
+world_missing <- data %>% filter(Country.Code == "WLD") %>% select(X2012..YR2012., X2013..YR2013., X2014..YR2014., X2015..YR2015., X2016..YR2016.) 
+colSums(is.na(world_missing))
+```
+
+In general, the world wide statistics are fairly consistent, with slightly more missing at 2016. It seems that the increase in missing values in 2016 is a world wide phenomenon for some reason.
