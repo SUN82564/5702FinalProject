@@ -44,11 +44,11 @@ c)  How do population structures vary across different conutries?
 
 a) Set up your final project repository following the EDAVproject template. Provide the link to the repo.
   \
-https://github.com/SUN82564/5702FinalProject
+https://github.com/SUN82564/5702-Final-Project
 
 b) Make sure that all team members have write access to the repository and have practiced making contributions. Provide a link to the contributors page of your repository showing that all team members have made contributions to the repo (Note that we do not have the ability to see who has write access, only contributors):
   \
-https://github.com/SUN82564/5702FinalProject/graphs/contributors
+https://github.com/SUN82564/5702-Final-Project/graphs/contributors
 
 ### 4. Data Sources
 
