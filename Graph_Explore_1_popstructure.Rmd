@@ -1,0 +1,97 @@
+---
+title: "Final_Project_Explore"
+output:
+  html_document: default
+  pdf_document: default
+---
+```{r setup, include=FALSE}
+ # keep this chunk in your .Rmd file
+ knitr::opts_chunk$set(warning = FALSE, message = FALSE)
+```
+
+## R Markdown
+```{r}
+library(tidyverse)
+my_data = tibble(data)
+```
+
+```{r}
+pop_data <- my_data %>% filter(`Series Name` %in% c('Population ages 0-14, total', 'Population ages 15-64, total', 
+                                                    'Population ages 65 and above, total'))
+names(pop_data)[3] <- 'Population'
+
+pop_data <- pop_data[c('Country Name', 'Population', '2016 [YR2016]') ]
+pop_data$`2016 [YR2016]` <- as.numeric(pop_data$`2016 [YR2016]`)
+pop_data$Population <- as.factor(pop_data$Population)
+pop_data$Population <- fct_relevel(pop_data$Population, 'Population ages 65 and above, total','Population ages 15-64, total', 'Population ages 0-14, total')
+```
+```{r}
+library(ggplot2)
+pop_data <- pop_data %>%
+  group_by(`Country Name`, 'Population') %>%
+  mutate(proportion = prop.table(`2016 [YR2016]`)) %>%
+  ungroup()
+
+ggplot(pop_data, aes(x = fct_relevel(`Country Name`, 'World', 'United States', 'Japan', 'China', 'India', 'South Africa'), y = proportion, fill=Population)) +
+  geom_col(position = 'stack') +
+  xlab("Country") +
+  ylab("Proportion") +
+  theme_classic(14) +
+  ggtitle('Population Structures for Countries in 2016')
+```
+
+Comment on the graph:
+
+The graph provides a basic overview of population structure in these 5 different countries and the world overall. It also allows us to compare between different countries, and countries with the world. If we use world as the benchmark, we can see that the countries that are more developed such as US, Japan and China has more percentage of older people and smaller percentage of teenagers. India and South Africa comparably has heavier teenager population and lighter senior population. If their growth rate or birth rate does not change, it could have an impact on labor market in the future. With a large proportion of older people in the population and smaller proportion of teenagers, it potentially will cause shortage in labor force which could then impact the overall economy. However, to make such conclusion, we will need more detailed breakdowns of the middle group to see which tail is heavier. It makes sense to have majority of the populatin is within the range from 15 to 64 since its has the wildest range. But if we have more detailed breakdowns of this group, we can definitely analyze further and project the future impacts on workforce. Next, we will further explore the workforce:
+
+```{r}
+labor_par_data <- my_data %>% filter(`Series Name` %in% c('Labor force participation rate, female (% of female population ages 15+) (modeled ILO estimate)', 'Labor force participation rate, male (% of male population ages 15+) (modeled ILO estimate)', 
+'Labor force participation rate, total (% of total population ages 15+) (modeled ILO estimate)'))
+
+names(labor_par_data)[3] <- 'Labor Force Group'
+
+labor_par_data$`Labor Force Group` <- as.factor(labor_par_data$`Labor Force Group`)
+
+labor_par_data$`Labor Force Group` <- fct_recode(labor_par_data$`Labor Force Group`, 'Female' = 'Labor force participation rate, female (% of female population ages 15+) (modeled ILO estimate)', 'Male' = 'Labor force participation rate, male (% of male population ages 15+) (modeled ILO estimate)', 'Total' = 'Labor force participation rate, total (% of total population ages 15+) (modeled ILO estimate)')
+```
+
+```{r}
+df1 <- labor_par_data %>% filter(`Labor Force Group` %in% c('Total') )
+df1 <- df1[c('Country Name', '2012 [YR2012]','2013 [YR2013]', '2014 [YR2014]','2015 [YR2015]', '2016 [YR2016]')]
+df1<- df1 %>% gather('Years', 'Laborforce Participation Rate', -`Country Name`)
+
+df1$Years <- as.factor(df1$Years)
+df1$Years <- fct_recode(df1$Years, '2012' = '2012 [YR2012]', '2013'= '2013 [YR2013]', '2014' = '2014 [YR2014]', '2015' ='2015 [YR2015]', '2016'='2016 [YR2016]')
+df1$`Laborforce Participation Rate` <- as.numeric(df1$`Laborforce Participation Rate`)
+
+ggplot(df1, aes(`Years`, `Laborforce Participation Rate`, group = `Country Name`, colour = `Country Name`)) +
+  geom_point() +
+  geom_line() +
+  theme_classic(14) +
+  ggtitle('Compare Across Countries: Trend on Laborforce Participation Rate')
+```
+Comment:Labor force participation Rate is defined as the percentage of people who participate in work as of the total population. From this graph, we can see that China is the highest across all these five years compare with other countries and the world overall. United States overlaps with the world. However, the percent of people who can contribute to the job market has been declining for the past several years for china, which could be caused by the increasing proportion of seniors in the population. Similarly, Japan is relative lower rate than the world average, which could also be explained by the population structure graph above. On the other hand, the two countries that have higher proportion of teenagers and in-middle age groups, India and South Africa, have only around half of the population who work. While many factors can play a part in this, we can expect rate to grow after 5 or 10 years since people will grow to be available workers. 
+
+
+```{r}
+df2 <- labor_par_data %>% filter(`Labor Force Group` %in% c('Female', 'Male') )
+df2 <- df2[c('Country Name', 'Labor Force Group', '2012 [YR2012]','2013 [YR2013]', '2014 [YR2014]','2015 [YR2015]', '2016 [YR2016]')]
+df2 <- df2 %>% gather('Years', 'Laborforce Participation Rate', -`Country Name`, -`Labor Force Group`)
+
+df2$Years <- as.factor(df2$Years)
+df2$Years <- fct_recode(df2$Years, '2012' = '2012 [YR2012]', '2013'= '2013 [YR2013]', '2014' = '2014 [YR2014]', '2015' ='2015 [YR2015]', '2016'='2016 [YR2016]')
+
+df2$`Country Name` <- as.factor(df2$`Country Name`)
+df2$`Country Name` <- fct_relevel(df2$`Country Name`, 'World', 'United States', 'Japan', 'China', 'India', 'South Africa')
+df2$`Labor Force Group` <- as.factor(df2$`Labor Force Group`)
+df2$`Laborforce Participation Rate` <- as.numeric(df2$`Laborforce Participation Rate`)
+
+ggplot(df2, aes(`Years`, `Laborforce Participation Rate`, group = `Labor Force Group`, colour = `Labor Force Group`)) +
+  geom_point() +
+  geom_line() +
+  facet_wrap(df2$`Country Name`) +
+  theme_classic(14)+
+  ggtitle('Comparison Across Countries: Labor Force Participation by Gender')
+```
+Comment：
+If we take a deeper look into the contribution structure and compare the participation rates by genders, we can see from this graph that they vary across different countries a lot. The specific gender group shows the proportion of working people in the its gender group. While China, United States and South Africa show narrower gap between male and female, India has the widest gap followed by Japan. From this observation, whether a country has  larger or smaller gap between participation rates of genders does not depend on its developing state. The wide gap for Japan and India could be explained by their cultural reasons, but we can also observe that male across these countries and the world has higher proportion of working people. If we were to narrow this difference between genders, there is definitely a lot of room to do. 
