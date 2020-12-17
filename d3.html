@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<title>Import/Export Contribution Comparison></title>
+<style type="text/css">
+			h1 {color:black;}		/* CSS styling */
+			p {color:blue;}
+</style>
+<body>
+<!-- Load d3.js -->
+<script src="https://d3js.org/d3.v4.js"></script>
+<h1>Export Contribution Comparison</h1>
+<h2>The initial graph is based on data from 2012</h2>
+<h3>Please make your predictions by dragging the blue circles and select a year to check your predictions: </h3>
+<!-- Add buttons -->
+<button onclick="update(data1)">YR2012</button>
+<button onclick="update(data2)">YR2013</button>
+<button onclick="update(data3)">YR2014</button>
+<button onclick="update(data4)">YR2015</button>
+<button onclick="update(data5)">YR2016</button>
+
+<!-- Create a div where the graph will take place -->
+<div id="d3try" ></div>
+<script>
+// create 2 data_set
+var data1 = [
+   {country: "World", value: 30.5843975},
+   {country: "United States", value: 13.6066085},
+   {country: "Japan", value: 14.54475256},
+   {country: "China", value: 25.40819583},
+   {country: "India", value: 24.53443066},
+   {country: "South Africa", value: 29.72387936}
+];
+
+var data2 = [
+   {country: "World", value: 30.39855604},
+   {country: "United States", value: 13.63931151},
+   {country: "Japan", value: 15.91539812},
+   {country: "China", value: 24.50498149},
+   {country: "India", value: 25.4308613},
+   {country: "South Africa", value: 30.97134112}
+];
+
+var data3 = [
+   {country: "World", value: 30.18437733},
+   {country: "United States", value: 13.62004392},
+   {country: "Japan", value: 17.54030155},
+   {country: "China", value: 23.49505827},
+   {country: "India", value: 22.96796301},
+   {country: "South Africa", value: 31.46864521}
+];
+
+var data4 = [
+   {country: "World", value: 29.29426403},
+   {country: "United States", value: 12.49904391},
+   {country: "Japan", value: 17.58892813},
+   {country: "China", value: 24.50498149},
+   {country: "India", value: 19.82442628},
+   {country: "South Africa", value: 21.34807161}
+];
+
+var data5 = [
+   {country: "World", value: 28.51651203},
+   {country: "United States", value: 11.89062242},
+   {country: "Japan", value: 16.11915257},
+   {country: "China", value: 19.65837757},
+   {country: "India", value: 19.31492239},
+   {country: "South Africa", value: 30.70259741}
+];
+// set the dimensions and margins of the graph
+var margin = {top: 30, right: 30, bottom: 70, left: 60},
+    width = 460 - margin.left - margin.right,
+    height = 400 - margin.top - margin.bottom;
+
+// append the svg object to the body of the page
+var svg = d3.select("#d3try")
+  .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform",
+          "translate(" + margin.left + "," + margin.top + ")")
+  .append("g", id ='circ');
+  
+// Initialize the X axis
+var x = d3.scaleBand()
+  .range([ 0, width ])
+  .padding(0.2);
+var xAxis = svg.append("g")
+  .attr("transform", "translate(0," + height + ")")
+
+// Initialize the Y axis
+var y = d3.scaleLinear()
+  .range([ height, 0]);
+var yAxis = svg.append("g")
+  .attr("class", "myYaxis")
+
+// A function that create / update the plot for a given variable:
+function update(data) {
+
+  // Update the X axis
+  x.domain(data.map(function(d) { return d.country; }))
+  xAxis.call(d3.axisBottom(x))
+
+  // Update the Y axis
+  y.domain([0, d3.max(data, function(d) { return d.value }) ]);
+  yAxis.transition().duration(1000).call(d3.axisLeft(y));
+
+  // Create the u variable
+  var u = svg.selectAll("rect")
+    .data(data)
+
+  u
+    .enter()
+    .append("rect") // Add a new rect for each new elements
+    .merge(u) // get the already existing elements as well
+    .transition() // and apply changes to all of them
+    .duration(1000)
+      .attr("x", function(d) { return x(d.country); })
+      .attr("y", function(d) { return y(d.value); })
+      .attr("width", x.bandwidth())
+      .attr("height", function(d) { return height - y(d.value); })
+      .attr("fill", "#7b6888")
+
+  // If less group in the new dataset, I delete the ones not in use anymore
+  u
+    .exit()
+    .remove()
+}
+update(data1)
+// Initialize the plot with the first dataset
+
+var svg_circ = svg.append("g", id = "circ").selectAll("circle").data([35,95,155,215,275,335]).enter().append("circle").attr("cx",d=>d).attr("cy",50).attr("r", 8).attr("fill", "yellow")
+
+var drag_handler = d3.drag()
+    .on("drag", function(d) {
+          d3.select(this)
+            .attr("cx", d.x = d3.event.x  )
+            .attr("cy", d.y = d3.event.y  );
+            });
+drag_handler(svg_circ)            
+</script>
+</body>
